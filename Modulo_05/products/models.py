@@ -11,6 +11,10 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.name} - {self.products.count()}'
 
+    # A classe meta abaixo é para indicar como será escrito o nome em plural de categorias no site admin
+    class Meta:
+        verbose_name_plural = 'Categories'
+
 
 class Product(models.Model):
     name = models.CharField('Nome', max_length=100)
@@ -20,6 +24,8 @@ class Product(models.Model):
     # deletar a category se deletar um product. E relate_name fará aparecer na categoria todos os produtos que tiver.
     category = models.ForeignKey(Category,
                                  on_delete=models.deletion.DO_NOTHING,
+                                 # Abaixo é o atributo products representa todos os produtos
+                                 # pertencentes a categoria.
                                  related_name='products'
                                  )
 
