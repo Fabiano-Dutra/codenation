@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from products.models import Product, Category
+from products.models import Product, Category, Order
 
 from django.utils.html import format_html
 from django.urls import reverse
@@ -52,3 +52,4 @@ class ProductModelAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductModelAdmin)
 admin.site.register(Category, CategoryModelAdmin)
+admin.site.register(Order)

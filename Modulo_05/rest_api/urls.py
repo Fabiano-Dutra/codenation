@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from rest_framework import routers
 
@@ -18,4 +18,5 @@ urlpatterns = [
     path('',include(router.urls)),
     # Rota para CategoryApiViews
     path('categories/', views.CategoryListOnlyAPIView.as_view()),
+    path(r'vendas/(?P<pk>\d+)?', views.OrderAPIView.as_view()),
 ]

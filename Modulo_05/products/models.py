@@ -32,3 +32,20 @@ class Product(models.Model):
     # Função p/ retornar o nome do produto, se tentar converter p/ uma string, aqui diz o que fazer.
     def __str__(self):
         return self.name
+
+
+# Função para API de vendas(orders)
+class Order(models.Model):
+    name = models.CharField('Nome do cliente', max_length=100)
+    payment = models.CharField('Meio de pagamento', max_length=50)
+    products = models.ManyToManyField(Product)
+
+    @property
+    def total_amount(self):
+        # Vai pegar todos os valores das vendas, somar e retornar este resultado.
+        return sum(product.price for product in self.products.all())
+
+    # Função string para ficar mais fácil a visualização.
+    def __str__(self):
+        # Retornando o nome de quem está comprando e o total de seu pedido.
+        return f'{self.name} - {self.total_amount}'
