@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_page
+from django.conf import settings
+
+
 from products.models import Product
 from products.forms import ProductModelForm
 
 
 # Toda função da view recebe uma request
+@cache_page(settings.CACHE_TTL)
 def list_products(request):
     # Fazendo a leitura de todos os produtos
     products = Product.objects.all()

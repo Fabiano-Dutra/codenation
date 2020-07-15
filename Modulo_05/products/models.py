@@ -1,8 +1,39 @@
 from django.db import models
+from django.db.models import Q
 # Create your models here.
 
+
+# Criação de manager de produtos
+class ProductManager(models.Manager):
+    #Filtro para pesquisar pelo texto usando a função with_text.
+    def with_text(self, text):
+        queryset = self.get_queryset().filter(name__contains=text)
+        return queryset
+
+    # Filtro para pegar os produtos caros acima de R$ 500,
+    # função expensive_produts.
+    def expensive_products(self):
+        return self.get_queryset().filter(price__gte=500)
+
+    # Filtro para pegar os produtos baratos abaixo de R$100,
+    # função cheap_toys.
+    def cheap_toys(self):
+        return self.get_queryset().filter(
+            category__name='Brinquedos',
+            price__lte=100
+        )
+
+    # Filtro com operador 'ou'.
+    def toys_or_expensive_items(self):
+        # O 'Q' funciona com operador 'ou'.
+        query_filter = Q(category__name = 'Brinquedos') | Q(price__gte=500)
+        queryset = self.get_queryset().filter(query_filter)
+        print(queryset.query)
+        return queryset
+
+
 # Esta classe tem de ficar acima para funcionar seu relacionamento com a classe Product que está abaixo.
-# Uma categoria pode ter vários produtos 1xn.
+# Uma categoria pode ter vários produtos 1 x n.
 class Category(models.Model):
     name = models.CharField('Nome', max_length=50)
     description = models.TextField('Descrição')
@@ -17,6 +48,9 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    # Abaixo instancia do manager de produtos.
+    # Extendendo o objects ao incluir mais comportamentos dentro dele, no caso o manager.
+    objects = ProductManager()
     name = models.CharField('Nome', max_length=100)
     description = models.TextField('Descrição')
     price = models.DecimalField('Preço', max_digits=8, decimal_places=2)

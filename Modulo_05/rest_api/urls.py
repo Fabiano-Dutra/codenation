@@ -1,5 +1,7 @@
 from django.urls import include, path, re_path
 
+from rest_framework.authtoken.views import obtain_auth_token
+
 from rest_framework import routers
 
 from rest_api import views
@@ -19,4 +21,6 @@ urlpatterns = [
     # Rota para CategoryApiViews
     path('categories/', views.CategoryListOnlyAPIView.as_view()),
     path(r'vendas/(?P<pk>\d+)?', views.OrderAPIView.as_view()),
+    path('get_token', obtain_auth_token),
+    # username e password
 ]
