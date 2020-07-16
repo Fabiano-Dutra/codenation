@@ -1,35 +1,60 @@
+'''
+    Modelo do app de Produtos.
+'''
+
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 # Create your models here.
 
 
 # Criação de manager de produtos
 class ProductManager(models.Manager):
+    '''
+        Realiza a pesquisa nos produtos cujo nome contenha 'text'
+    '''
     #Filtro para pesquisar pelo texto usando a função with_text.
-    def with_text(self, text):
+    def with_text(self, text: str) -> QuerySet:
         queryset = self.get_queryset().filter(name__contains=text)
         return queryset
 
     # Filtro para pegar os produtos caros acima de R$ 500,
     # função expensive_produts.
-    def expensive_products(self):
+    def expensive_products(self) -> QuerySet:
+        '''
+            Realiza a lista dos produtos cujo preço seja maior do que R$ 500
+        '''
         return self.get_queryset().filter(price__gte=500)
 
     # Filtro para pegar os produtos baratos abaixo de R$100,
     # função cheap_toys.
-    def cheap_toys(self):
+    def cheap_toys(self) -> QuerySet:
+        '''
+            Retorna a lista dos brinquedos mais baratos.
+        '''
         return self.get_queryset().filter(
             category__name='Brinquedos',
             price__lte=100
         )
 
     # Filtro com operador 'ou'.
-    def toys_or_expensive_items(self):
+    def toys_or_expensive_items(self) -> QuerySet:
+        '''
+           Retorna a lista dos brinquedos mais caros.
+        '''
         # O 'Q' funciona com operador 'ou'.
         query_filter = Q(category__name = 'Brinquedos') | Q(price__gte=500)
         queryset = self.get_queryset().filter(query_filter)
         print(queryset.query)
         return queryset
+
+    # Função para testar o uso de documentação nas funções acima.
+    def test_function(self):
+        a = self.with_text('')
+        b = self.expensive_products()
+        c = self.cheap_toys()
+        d = self.toys_or_expensive_items()
+
+
 
 
 # Esta classe tem de ficar acima para funcionar seu relacionamento com a classe Product que está abaixo.
@@ -48,6 +73,9 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    '''
+        Model contendo todos os campos necessários para cadastrar produtos no ecomm.
+    '''
     # Abaixo instancia do manager de produtos.
     # Extendendo o objects ao incluir mais comportamentos dentro dele, no caso o manager.
     objects = ProductManager()
