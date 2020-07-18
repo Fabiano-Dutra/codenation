@@ -8,7 +8,7 @@ from products.forms import ProductModelForm
 
 
 # Toda função da view recebe uma request
-@cache_page(settings.CACHE_TTL)
+# @cache_page(settings.CACHE_TTL) # CACHE retirado para fazer com o heroku
 def list_products(request):
     # Fazendo a leitura de todos os produtos
     products = Product.objects.all()

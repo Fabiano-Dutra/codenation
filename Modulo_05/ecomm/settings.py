@@ -132,6 +132,8 @@ STATIC_URL = '/static/'
 
 # Cache
 # 60 segundos x 5
+'''  CACHE FOI REMOVIDO PARA FAZER COM O HEROKU
+
 CACHE_TL = 60 * 5
 
 CACHES = {
@@ -144,3 +146,4 @@ CACHES = {
         "KEY_PREFIX": "CODE_NATION"
     }
 }
+'''
